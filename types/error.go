@@ -12,11 +12,35 @@ import (
 type ErrorCode int32
 
 const (
+	// Indicates that the error is not specific
+	ERR_GENERIC ErrorCode = 0
+
 	// Indicates that request body cannot be read.
-	ERR_BODY_UNREADABLE ErrorCode = 0
+	ERR_BODY_UNREADABLE ErrorCode = 1
 
 	// Indicates that byte slice cannot be unmarshaled.
-	ERR_UNMARSHAL ErrorCode = 1
+	ERR_UNMARSHAL ErrorCode = 2
+
+	// Indicates that something went wrong while inserting an entry to database.
+	ERR_DB_INSERT ErrorCode = 3
+
+	// Indicates that something went wrong while listing entries from database.
+	ERR_DB_LIST ErrorCode = 4
+
+	// Indicates that an error occured while decoding db results.
+	ERR_DB_DECODE ErrorCode = 5
+
+	// Indicates that an error occured while deleting a db entry.
+	ERR_DB_DELETE ErrorCode = 6
+
+	// Indicates that the specified entity is not found.
+	ERR_NOT_FOUND ErrorCode = 7
+
+	// Indicates that an error occured while updating an entity.
+	ERR_DB_UPDATE ErrorCode = 8
+
+	// Indicates that no valid field has been specified for an entity update.
+	ERR_NOTHING_TO_UPDATE ErrorCode = 9
 )
 
 func (ec ErrorCode) ToHTTPStatus() int {
@@ -47,10 +71,10 @@ func (e *Error) Error() string {
 }
 
 // ErrByString returns an Error with the specified code and message.
-func ErrByString(code ErrorCode, message string) error {
+func Errf(code ErrorCode, format string, args ...interface{}) error {
 	return &Error{
 		Code:    code,
-		Message: message,
+		Message: fmt.Sprintf(format, args...),
 	}
 }
 

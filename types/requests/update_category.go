@@ -12,9 +12,6 @@ type UpdateCategoryField int32
 
 const (
 	CAGETORY_NAME UpdateCategoryField = 0
-	ITEMS_ADD     UpdateCategoryField = 1
-	ITEMS_REMOVE  UpdateCategoryField = 2
-	ITEMS_REPLACE UpdateCategoryField = 3
 )
 
 type UpdateCategoryReq struct {

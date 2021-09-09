@@ -8,9 +8,8 @@ import (
 
 // Category is the type that stores menu item ids.
 type Category struct {
-	ID    string   `json:"id,omitempty" bson:"_id"`
-	Name  string   `json:"name,omitempty" bson:"name"`
-	Items []string `json:"items,omitempty" bson:"items"`
+	ID   string `json:"id,omitempty" bson:"_id"`
+	Name string `json:"name,omitempty" bson:"name"`
 }
 
 func (c *Category) UnmarshalBody(body io.ReadCloser) error {

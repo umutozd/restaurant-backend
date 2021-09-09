@@ -10,8 +10,12 @@ import (
 // menu item within. It is not stored in the database, but rather
 // created when sending the whole menu.
 type Menu struct {
-	Categories []*Category `json:"categories,omitempty"`
-	Items      []*MenuItem `json:"items,omitempty"`
+	All []*CategoryAndItems `json:"all,omitempty"`
+}
+
+type CategoryAndItems struct {
+	Category *Category   `json:"category,omitempty"`
+	Items    []*MenuItem `json:"items,omitempty"`
 }
 
 // MenuItem is the most basic type that contains information
@@ -27,11 +31,11 @@ type MenuItem struct {
 func (item *MenuItem) UnmarshalBody(body io.ReadCloser) error {
 	b, err := ioutil.ReadAll(body)
 	if err != nil {
-		return Err(ERR_BODY_UNREADABLE, err)
+		return Errf(ERR_BODY_UNREADABLE, "error reading request body: %v", err)
 	}
 
 	if err = json.Unmarshal(b, item); err != nil {
-		return Err(ERR_UNMARSHAL, err)
+		return Errf(ERR_UNMARSHAL, "error unmarshaling request body: %v", err)
 	}
 
 	return nil
