@@ -42,11 +42,14 @@ const (
 	// Indicates that no valid field has been specified for an entity update.
 	ERR_NOTHING_TO_UPDATE ErrorCode = 9
 
-	// Indicated that DbURL field of the config has been left empty.
+	// Indicates that DbURL field of the config has been left empty.
 	ERR_CFG_DB_URL_NOT_SPECIFIED ErrorCode = 10
 
-	// Indicated that DbName field of the config has been left empty.
+	// Indicates that DbName field of the config has been left empty.
 	ERR_CFG_DB_NAME_NOT_SPECIFIED ErrorCode = 11
+
+	// Indicates that http request has wrong http method.
+	ERR_WRONG_HTTP_METHOD ErrorCode = 12
 )
 
 func (ec ErrorCode) ToHTTPStatus() int {

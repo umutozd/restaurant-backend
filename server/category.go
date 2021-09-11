@@ -3,13 +3,12 @@ package server
 import (
 	"net/http"
 
-	"github.com/sirupsen/logrus"
 	"github.com/umutozd/restaurant-backend/types"
 	"github.com/umutozd/restaurant-backend/types/requests"
 )
 
 func (s *server) CreateCategory(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "CreateCategory")
+	logger := s.getLoggerFromRequest(r)
 
 	// read request body
 	category := &types.Category{}
@@ -30,7 +29,7 @@ func (s *server) CreateCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) ListCategories(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "ListCategories")
+	logger := s.getLoggerFromRequest(r)
 	logger.Info()
 
 	categories, err := s.storage.ListCategories(r.Context())
@@ -38,12 +37,15 @@ func (s *server) ListCategories(w http.ResponseWriter, r *http.Request) {
 		s.writeError(w, logger, err)
 		return
 	}
+	if categories == nil {
+		categories = []*types.Category{}
+	}
 
 	s.writeResponse(w, categories, http.StatusOK)
 }
 
 func (s *server) UpdateCategory(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "UpdateCategory")
+	logger := s.getLoggerFromRequest(r)
 
 	// read request body
 	req := &requests.UpdateCategoryReq{}
@@ -64,7 +66,7 @@ func (s *server) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) DeleteCategory(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "DeleteCategory")
+	logger := s.getLoggerFromRequest(r)
 	logger.Info()
 
 	// read request body

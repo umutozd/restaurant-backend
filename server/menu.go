@@ -3,13 +3,12 @@ package server
 import (
 	"net/http"
 
-	"github.com/sirupsen/logrus"
 	"github.com/umutozd/restaurant-backend/types"
 	"github.com/umutozd/restaurant-backend/types/requests"
 )
 
 func (s *server) ListMenu(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "ListMenu")
+	logger := s.getLoggerFromRequest(r)
 	logger.Info()
 
 	menu, err := s.storage.ListMenu(r.Context())
@@ -22,7 +21,7 @@ func (s *server) ListMenu(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) CreateMenuItem(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "CreateMenuItem")
+	logger := s.getLoggerFromRequest(r)
 
 	// read request body
 	item := &types.MenuItem{}
@@ -43,8 +42,9 @@ func (s *server) CreateMenuItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) ListMenuItems(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "ListMenuItems")
+	logger := s.getLoggerFromRequest(r)
 	logger.Info()
+	// logger := r.Context().Value(keyLogger{}).(*logrus.Entry)
 
 	items, err := s.storage.ListMenuItems(r.Context())
 	if err != nil {
@@ -56,7 +56,7 @@ func (s *server) ListMenuItems(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) UpdateMenuItem(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "UpdateMenuItem")
+	logger := s.getLoggerFromRequest(r)
 
 	// read request body
 	req := &requests.UpdateMenuItemReq{}
@@ -77,7 +77,7 @@ func (s *server) UpdateMenuItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) DeleteMenuItem(w http.ResponseWriter, r *http.Request) {
-	logger := logrus.WithField("endpoint", "DeleteMenuItem")
+	logger := s.getLoggerFromRequest(r)
 	logger.Info()
 
 	// read request body

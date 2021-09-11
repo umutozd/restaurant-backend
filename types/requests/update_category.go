@@ -15,8 +15,8 @@ const (
 )
 
 type UpdateCategoryReq struct {
-	Fields   []UpdateCategoryField
-	Category *types.Category
+	Fields   []UpdateCategoryField `json:"fields,omitempty"`
+	Category *types.Category       `json:"category,omitempty"`
 }
 
 func (req *UpdateCategoryReq) UnmarshalBody(body io.ReadCloser) error {

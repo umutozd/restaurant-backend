@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/umutozd/restaurant-backend/storage"
 )
 
@@ -27,20 +28,22 @@ func NewServer(cfg *Config) (Server, error) {
 }
 
 func (s *server) Listen() error {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/api/v1/menu/list", s.ListMenu)
+	r := mux.NewRouter()
+	r.HandleFunc(EndpointListMenu.String(), s.getHandler(EndpointListMenu))
 
-	mux.HandleFunc("/api/v1/menu/items/create", s.CreateMenuItem)
-	mux.HandleFunc("/api/v1/menu/items/list", s.ListMenuItems)
-	mux.HandleFunc("/api/v1/menu/items/update", s.UpdateMenuItem)
-	mux.HandleFunc("/api/v1/menu/items/delete", s.DeleteMenuItem)
+	r.HandleFunc(EndpointCreateMenuItem.String(), s.getHandler(EndpointCreateMenuItem))
+	r.HandleFunc(EndpointListMenuItems.String(), s.getHandler(EndpointListMenuItems))
+	r.HandleFunc(EndpointUpdateMenuItem.String(), s.getHandler(EndpointUpdateMenuItem))
+	r.HandleFunc(EndpointDeleteMenuItem.String(), s.getHandler(EndpointDeleteMenuItem))
 
-	mux.HandleFunc("/api/v1/category/create", s.CreateCategory)
-	mux.HandleFunc("/api/v1/category/list", s.ListCategories)
-	mux.HandleFunc("/api/v1/category/update", s.UpdateCategory)
-	mux.HandleFunc("/api/v1/category/delete", s.DeleteCategory)
+	r.HandleFunc(EndpointCreateCategory.String(), s.getHandler(EndpointCreateCategory))
+	r.HandleFunc(EndpointListCategories.String(), s.getHandler(EndpointListCategories))
+	r.HandleFunc(EndpointUpdateCategory.String(), s.getHandler(EndpointUpdateCategory))
+	r.HandleFunc(EndpointDeleteCategory.String(), s.getHandler(EndpointDeleteCategory))
 
-	if err := http.ListenAndServe(s.cfg.GetPort(), mux); err != nil {
+	http.Handle("/", r)
+
+	if err := http.ListenAndServe(s.cfg.GetPort(), r); err != nil {
 		return err
 	}
 
