@@ -14,6 +14,7 @@ import (
 const (
 	menuItemsCollection  = "MenuItems"
 	categoriesCollection = "Categories"
+	cartsCollection      = "Carts"
 )
 
 type Storage interface {
@@ -27,6 +28,8 @@ type Storage interface {
 	ListCategories(ctx context.Context) ([]*types.Category, error)
 	UpdateCategory(ctx context.Context, req *requests.UpdateCategoryReq) (*types.Category, error)
 	DeleteCategory(ctx context.Context, req *requests.DeleteCategoryReq) error
+
+	UpdateCart(ctx context.Context, req *requests.UpdateCartReq) (*types.Cart, error)
 }
 
 type storage struct {
@@ -40,6 +43,10 @@ func (s *storage) menuItems() *mongo.Collection {
 
 func (s *storage) categories() *mongo.Collection {
 	return s.client.Database(s.dbName).Collection(categoriesCollection)
+}
+
+func (s *storage) carts() *mongo.Collection {
+	return s.client.Database(s.dbName).Collection(cartsCollection)
 }
 
 func NewStorage(dbURL, dbName string) (Storage, error) {

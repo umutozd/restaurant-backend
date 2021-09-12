@@ -31,7 +31,7 @@ func newTestStorage(t *testing.T) *storage {
 	s := &storage{client: client, dbName: dbName}
 
 	// drop existing collections
-	for _, coll := range []string{categoriesCollection, menuItemsCollection} {
+	for _, coll := range []string{categoriesCollection, menuItemsCollection, cartsCollection} {
 		res, err := s.client.Database(s.dbName).Collection(coll).DeleteMany(context.TODO(), bson.M{})
 		if err != nil {
 			t.Fatalf("error deleting all documents in %s collection: %v", coll, err)
