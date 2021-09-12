@@ -1,10 +1,36 @@
-## Endpoints and Specifications
+# Endpoints and Specifications
 
 Currently, there are 11 elementary endpoints necessary for the system. Here are their specifications:
 
-- **/api/v1/menu/list**:
+## Table of Contents
+- [ListMenu](#listmenu)
+- [CreateMenuItem](#createmenuitem)
+- [ListMenuItems](#listmenuitems)
+- [UpdateMenuItem](#updatemenuitem)
+- [DeleteMenuItem](#deletemenuitem)
+- [CreateCategory](#createcategory)
+- [ListCategories](#listcategories)
+- [UpdateCategory](#updatecategory)
+- [DeleteCategory](#deletecategory)
+- [UpdateCart](#updatecart)
+- [UpdateCartItemsStatus](#updatecartitemsstatus)
+
+
+### CreateMenuItem
+- Description: Creates a MenuItem object.
+  - HTTP:
+    ```http
+    POST /api/v1/menu/items/create
+    ```
+  - Body: `MenuItem` object.
+  - Response: `MenuItem` object with its ID set.
+
+### ListMenu
   - Description: Finds all categories, menu items and groups items by the categories they belong to.
-  - Method: `GET`
+  - HTTP:
+    ```http
+    GET /api/v1/menu/list
+    ```
   - Body: None
   - Response:
     ```Typescript
@@ -16,18 +42,24 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
     }
     ```
 
-- **/api/v1/menu/items/list**
-  - Description: Lists all MenuItem objects.
-  - Method: `GET`
+### ListMenuItems
+  - Description: Lists all `MenuItem` objects.
+  - HTTP:
+    ```http
+    GET /api/v1/menu/items/list
+    ```
   - Body: None
   - Response:
     ```Typescript
     type MenuItemsList MenuItem[];
     ```
 
-- **/api/v1/menu/items/update**
-  - Description: Updated a MenuItem specified by its id.
-  - Method: `POST`
+### UpdateMenuItem
+  - Description: Updated a `MenuItem` specified by its ID.
+  - HTTP:
+    ```http
+    POST /api/v1/menu/items/update
+    ```
   - Body:
     ```Typescript
     interface UpdateMenuItemReq {
@@ -37,11 +69,14 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
       item: MenuItem;
     }
     ```
-  - Response: The updated `MenuItem`
+  - Response: The updated `MenuItem` object.
 
-- **/api/v1/menu/items/delete**
-  - Description: Deletes a MenuItem object.
-  - Method: `DELETE`
+### DeleteMenuItem
+  - Description: Deletes a `MenuItem` object, specified by its ID.
+  - HTTP:
+    ```http
+    DELETE /api/v1/menu/items/delete
+    ```
   - Body: 
     ```Typescript
     interface DeleteMenuItemReq {
@@ -51,24 +86,33 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
     ```
   - Response: Unused.
 
-- **/api/v1/category/create**
-  - Description: Creates a MenuItem object.
-  - Method: `POST`
+### CreateCategory
+  - Description: Creates a `Category` object.
+  - HTTP:
+    ```http
+    POST /api/v1/category/create
+    ```
   - Body: `Category` object
   - Response: `Category` object, with its id set.
 
-- **/api/v1/category/list**
-  - Description: Lists all Category objects.
-  - Method: `GET`
+### ListCategories
+  - Description: Lists all `Category` objects.
+  - HTTP:
+    ```http
+    GET /api/v1/category/list
+    ```
   - Body: None
   - Response: 
     ```Typescript
     type CategoryList Category[];
     ```
 
-- **/api/v1/category/update**
-  - Description: Updates a Category object, specified by its id.
-  - Method: `POST`
+### UpdateCategory
+  - Description: Updates a `Category` object, specified by its ID.
+  - HTTP:
+    ```http
+    POST /api/v1/category/update
+    ```
   - Body: 
     ```Typescript
     interface UpdateCategoryReq {
@@ -82,9 +126,12 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
     ```
   - Response: The updated `Category` object.
 
-- **/api/v1/category/delete**
-  - Description: Deletes a Category object, specified by its id.
-  - Method: `DELETE`
+### DeleteCategory
+  - Description: Deletes a `Category` object, specified by its ID.
+  - HTTP:
+    ```http
+    DELETE /api/v1/category/delete
+    ```
   - Body: 
     ```Typescript
     interface DeleteCategoryReq {
@@ -94,9 +141,12 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
     ```
   - Response: Unused.
 
-- **/api/v1/cart/update**
-  - Description: Adds/removes items to/from a `Cart` object. Each CartItem created will have `status=0`.
-  - Method: `POST`
+### UpdateCart
+  - Description: Adds/removes items to/from a `Cart` object. Each `CartItem` created will have `status=0`.
+  - HTTP:
+    ```http
+    POST /api/v1/cart/update
+    ```
   - Body: 
     ```Typescript
     interface UpdateCartReq {
@@ -110,9 +160,12 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
     ```
   - Response: Updated `Cart` object.
 
-- **/api/v1/cart/update/items/status**
-  - Description: Updates the states of CartItem's in the Cart, specified by their ID's.
-  - Method: `POST`
+### UpdateCartItemsStatus
+  - Description: Updates the states of `CartItem`'s in the `Cart`, specified by their ID's.
+  - HTTP:
+    ```http
+    POST /api/v1/cart/update/items/status
+    ```
   - Body:
   ```Typescript
   interface UpdateCartItemsStatusReq {
