@@ -30,6 +30,7 @@ type Storage interface {
 	DeleteCategory(ctx context.Context, req *requests.DeleteCategoryReq) error
 
 	UpdateCart(ctx context.Context, req *requests.UpdateCartReq) (*types.Cart, error)
+	UpdateCartItemsStatus(ctx context.Context, req *requests.UpdateCartItemsStatusReq) (*types.Cart, error)
 }
 
 type storage struct {

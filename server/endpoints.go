@@ -24,13 +24,14 @@ const (
 	EndpointUpdateCategory endpoint = "/api/v1/category/update"
 	EndpointDeleteCategory endpoint = "/api/v1/category/delete"
 
-	EndpointUpdateCart endpoint = "/api/v1/cart/update"
+	EndpointUpdateCart            endpoint = "/api/v1/cart/update"
+	EndpointUpdateCartItemsStatus endpoint = "/api/v1/cart/update/items/status"
 )
 
 var allEndpoints = []endpoint{
 	EndpointListMenu, EndpointCreateMenuItem, EndpointListMenuItems, EndpointUpdateMenuItem,
 	EndpointDeleteMenuItem, EndpointCreateCategory, EndpointListCategories,
-	EndpointUpdateCategory, EndpointDeleteCategory, EndpointUpdateCart,
+	EndpointUpdateCategory, EndpointDeleteCategory, EndpointUpdateCart, EndpointUpdateCartItemsStatus,
 }
 
 func (e endpoint) String() string {
@@ -79,6 +80,8 @@ func (s *server) getHandler(e endpoint) http.HandlerFunc {
 		h = s.DeleteCategory
 	case EndpointUpdateCart:
 		h = s.UpdateCart
+	case EndpointUpdateCartItemsStatus:
+		h = s.UpdateCartItemsStatus
 	default:
 		return func(w http.ResponseWriter, r *http.Request) {
 			logger := s.getLoggerFromRequest(r)

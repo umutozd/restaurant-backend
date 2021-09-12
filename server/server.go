@@ -42,6 +42,7 @@ func (s *server) Listen() error {
 	r.HandleFunc(EndpointDeleteCategory.String(), s.getHandler(EndpointDeleteCategory))
 
 	r.HandleFunc(EndpointUpdateCart.String(), s.getHandler(EndpointUpdateCart))
+	r.HandleFunc(EndpointUpdateCartItemsStatus.String(), s.getHandler(EndpointUpdateCartItemsStatus))
 	http.Handle("/", r)
 
 	if err := http.ListenAndServe(s.cfg.GetPort(), r); err != nil {
