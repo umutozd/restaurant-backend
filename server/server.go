@@ -17,7 +17,7 @@ type server struct {
 }
 
 func NewServer(cfg *Config) (Server, error) {
-	store, err := storage.NewStorage(cfg.DbURL, cfg.DbName)
+	store, err := storage.NewStorage(cfg.DbURL, cfg.DbName, cfg.DBCronInterval)
 	if err != nil {
 		return nil, err
 	}

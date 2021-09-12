@@ -69,6 +69,13 @@ func main() {
 			EnvVar:      "RESTAURANT_LOGRUS_FORMATTER",
 			Usage:       "The name of the formatter used for logging.",
 		},
+		cli.DurationFlag{
+			Name:        "db-cron-interval",
+			Value:       config.DBCronInterval,
+			Destination: &config.DBCronInterval,
+			EnvVar:      "RESTAURANT_DB_CRON_INTERVAL",
+			Usage:       "The length of the intervals that db deletes expired carts (more than 14 days old).",
+		},
 	}
 
 	app.Action = run

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/umutozd/restaurant-backend/types"
@@ -11,9 +12,10 @@ import (
 )
 
 const (
-	defaultPort       = 9001
-	standartFormatter = "standard"
-	jsonFormatter     = "json"
+	defaultPort           = 9001
+	standartFormatter     = "standard"
+	jsonFormatter         = "json"
+	defaultDBCronInterval = time.Hour * 24 * 7 // 7 days
 )
 
 type Config struct {
@@ -22,12 +24,14 @@ type Config struct {
 	DbURL           string
 	DbName          string
 	LogrusFormatter string
+	DBCronInterval  time.Duration
 }
 
 func NewConfig() *Config {
 	return &Config{
 		Port:            defaultPort,
 		LogrusFormatter: standartFormatter,
+		DBCronInterval:  defaultDBCronInterval,
 	}
 }
 

@@ -33,8 +33,9 @@ type Storage interface {
 }
 
 type storage struct {
-	client *mongo.Client
-	dbName string
+	client       *mongo.Client
+	dbName       string
+	cronInterval time.Duration
 }
 
 func (s *storage) menuItems() *mongo.Collection {
@@ -49,7 +50,7 @@ func (s *storage) carts() *mongo.Collection {
 	return s.client.Database(s.dbName).Collection(cartsCollection)
 }
 
-func NewStorage(dbURL, dbName string) (Storage, error) {
+func NewStorage(dbURL, dbName string, cronInterval time.Duration) (Storage, error) {
 	logrus.Debug("Connecting to mongodb")
 	client, err := mongo.NewClient(options.Client().ApplyURI(dbURL))
 	if err != nil {
@@ -64,5 +65,8 @@ func NewStorage(dbURL, dbName string) (Storage, error) {
 		return nil, err
 	}
 	logrus.Debug("Connected to mongodb")
-	return &storage{client: client, dbName: dbName}, nil
+
+	s := &storage{client: client, dbName: dbName, cronInterval: cronInterval}
+	go s.startCron()
+	return s, nil
 }
