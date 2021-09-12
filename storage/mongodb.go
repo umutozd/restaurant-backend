@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/umutozd/restaurant-backend/types"
@@ -48,10 +49,13 @@ func NewStorage(dbURL, dbName string) (Storage, error) {
 		logrus.WithError(err).Errorf("error creating mongo client")
 		return nil, err
 	}
-	err = client.Connect(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	err = client.Connect(ctx)
+	cancel()
 	if err != nil {
 		logrus.WithError(err).Errorf("error connecting to mongo server")
 		return nil, err
 	}
+	logrus.Debug("Connected to mongodb")
 	return &storage{client: client, dbName: dbName}, nil
 }

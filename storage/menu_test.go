@@ -76,7 +76,7 @@ func TestListMenu(t *testing.T) {
 		}
 	}
 
-	expectedMenu := &types.Menu{All: []*types.CategoryAndItems{
+	expectedMenu := &types.Menu{
 		{
 			Category: categories[0],
 			Items: []*types.MenuItem{
@@ -92,7 +92,7 @@ func TestListMenu(t *testing.T) {
 				items[4],
 			},
 		},
-	}}
+	}
 	result, err := s.ListMenu(context.TODO())
 	if err != nil {
 		t.Fatalf("error fetching menu: %v", err)

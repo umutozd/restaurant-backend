@@ -51,6 +51,9 @@ func (s *server) ListMenuItems(w http.ResponseWriter, r *http.Request) {
 		s.writeError(w, logger, err)
 		return
 	}
+	if items == nil {
+		items = []*types.MenuItem{}
+	}
 
 	s.writeResponse(w, items, http.StatusOK)
 }

@@ -50,6 +50,9 @@ const (
 
 	// Indicates that http request has wrong http method.
 	ERR_WRONG_HTTP_METHOD ErrorCode = 12
+
+	// Indicates that specified category id when creating a menu item does not exist.
+	ERR_DB_CATEGORY_NOT_FOUND ErrorCode = 13
 )
 
 func (ec ErrorCode) ToHTTPStatus() int {

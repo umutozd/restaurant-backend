@@ -106,9 +106,9 @@ func compareMenus(m1, m2 *types.Menu) bool {
 		return false
 	}
 
-	for _, ci1 := range m1.All {
+	for _, ci1 := range *m1 {
 		// search ci1.Category in m2
-		for _, ci2 := range m2.All {
+		for _, ci2 := range *m2 {
 			diff := compareCategories(ci1.Category, ci2.Category)
 			if diff == "" {
 				// found the item with same category, all items must match

@@ -19,6 +19,9 @@ func run(c *cli.Context) error {
 		logrus.SetLevel(logrus.DebugLevel)
 		logrus.Debugf("Running with config: %s", config.ToString())
 	}
+
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+
 	s, err := server.NewServer(config)
 	if err != nil {
 		return err

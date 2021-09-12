@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/umutozd/restaurant-backend/types"
 	"github.com/umutozd/restaurant-backend/types/requests"
@@ -69,5 +70,15 @@ func (s *storage) DeleteCategory(ctx context.Context, req *requests.DeleteCatego
 		return types.Errf(types.ERR_NOT_FOUND, "deleted count is %d, not 1", res.DeletedCount)
 	}
 
+	return nil
+}
+
+func (s *storage) validateCategoryID(ctx context.Context, id string) error {
+	if err := s.categories().FindOne(ctx, bson.M{"_id": id}).Err(); err != nil {
+		if err == mongo.ErrNoDocuments {
+			return types.Errf(types.ERR_DB_CATEGORY_NOT_FOUND, fmt.Sprintf("category with id=%s does not exist", id))
+		}
+		return types.Err(types.ERR_GENERIC, fmt.Errorf("error validating category id: %v", err))
+	}
 	return nil
 }

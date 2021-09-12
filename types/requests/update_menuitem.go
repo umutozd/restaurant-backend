@@ -18,8 +18,8 @@ const (
 )
 
 type UpdateMenuItemReq struct {
-	Fields []UpdateMenuItemField
-	Item   *types.MenuItem
+	Fields []UpdateMenuItemField `json:"fields,omitempty"`
+	Item   *types.MenuItem       `json:"item,omitempty"`
 }
 
 func (req *UpdateMenuItemReq) UnmarshalBody(body io.ReadCloser) error {

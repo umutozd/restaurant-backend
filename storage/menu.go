@@ -21,9 +21,8 @@ func (s *storage) ListMenu(ctx context.Context) (*types.Menu, error) {
 		return nil, err
 	}
 
-	menu := &types.Menu{
-		All: make([]*types.CategoryAndItems, 0, len(categories)),
-	}
+	menu := make([]*types.CategoryAndItems, 0, len(categories))
+
 	for _, c := range categories {
 		categoryAndItems := &types.CategoryAndItems{
 			Category: c,
@@ -33,13 +32,19 @@ func (s *storage) ListMenu(ctx context.Context) (*types.Menu, error) {
 				categoryAndItems.Items = append(categoryAndItems.Items, item)
 			}
 		}
-		menu.All = append(menu.All, categoryAndItems)
+		menu = append(menu, categoryAndItems)
 	}
 
-	return menu, nil
+	m := types.Menu(menu)
+	return &m, nil
 }
 
 func (s *storage) CreateMenuItem(ctx context.Context, item *types.MenuItem) (*types.MenuItem, error) {
+	// first, check if category id is valid
+	if err := s.validateCategoryID(ctx, item.CategoryID); err != nil {
+		return nil, err
+	}
+
 	item.ID = primitive.NewObjectID().Hex()
 	_, err := s.menuItems().InsertOne(ctx, item)
 	if err != nil {
@@ -64,10 +69,12 @@ func (s *storage) ListMenuItems(ctx context.Context) ([]*types.MenuItem, error) 
 func (s *storage) UpdateMenuItem(ctx context.Context, req *requests.UpdateMenuItemReq) (*types.MenuItem, error) {
 	filter := bson.M{"_id": req.Item.ID}
 	set := bson.M{}
+	validateCategoryID := false
 	for _, f := range req.Fields {
 		switch f {
 		case requests.CATEGORY_ID:
 			set["category_id"] = req.Item.CategoryID
+			validateCategoryID = true
 		case requests.ITEM_NAME:
 			set["name"] = req.Item.Name
 		case requests.PRICE:
@@ -78,6 +85,12 @@ func (s *storage) UpdateMenuItem(ctx context.Context, req *requests.UpdateMenuIt
 			continue
 		}
 	}
+	if validateCategoryID {
+		if err := s.validateCategoryID(ctx, req.Item.CategoryID); err != nil {
+			return nil, err
+		}
+	}
+
 	update := bson.M{"$set": set}
 	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
 

@@ -9,9 +9,7 @@ import (
 // Menu is the top level struct that contains every category and
 // menu item within. It is not stored in the database, but rather
 // created when sending the whole menu.
-type Menu struct {
-	All []*CategoryAndItems `json:"all,omitempty"`
-}
+type Menu []*CategoryAndItems
 
 type CategoryAndItems struct {
 	Category *Category   `json:"category,omitempty"`
