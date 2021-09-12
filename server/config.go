@@ -3,26 +3,35 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"github.com/umutozd/restaurant-backend/types"
+	"github.com/umutozd/restaurant-backend/utils"
 )
 
 const (
-	defaultPort = 9001
+	defaultPort           = 9001
+	standartFormatter     = "standard"
+	jsonFormatter         = "json"
+	defaultDBCronInterval = time.Hour * 24 * 7 // 7 days
 )
 
 type Config struct {
-	Debug bool
-	// The port to listen to
-	Port   int
-	DbURL  string
-	DbName string
+	Debug           bool
+	Port            int
+	DbURL           string
+	DbName          string
+	LogrusFormatter string
+	DBCronInterval  time.Duration
 }
 
 func NewConfig() *Config {
 	return &Config{
-		Port: defaultPort,
+		Port:            defaultPort,
+		LogrusFormatter: standartFormatter,
+		DBCronInterval:  defaultDBCronInterval,
 	}
 }
 
@@ -34,7 +43,22 @@ func (cfg *Config) Validate() error {
 	if cfg.DbName == "" {
 		return types.Errf(types.ERR_CFG_DB_NAME_NOT_SPECIFIED, "DbName must be specified")
 	}
+	validFormatters := []string{standartFormatter, jsonFormatter}
+	if !utils.StringSliceContains(validFormatters, cfg.LogrusFormatter) {
+		return types.Errf(types.ERR_CFG_LOGRUS_FORMATTER_INVALID, fmt.Sprintf("LogrusFormatter must be one of %s", strings.Join(validFormatters, ",")))
+	}
 	return nil
+}
+
+// SetFormatter sets logrus formatter. Validate should be called before this function
+// because an invalid value to LogrusFormatter field will make this function no-op.
+func (cfg *Config) SetFormatter() {
+	switch cfg.LogrusFormatter {
+	case standartFormatter:
+		logrus.SetFormatter(&logrus.TextFormatter{})
+	case jsonFormatter:
+		logrus.SetFormatter(&logrus.JSONFormatter{})
+	}
 }
 
 func (cfg *Config) GetPort() string {

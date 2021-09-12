@@ -17,7 +17,7 @@ type server struct {
 }
 
 func NewServer(cfg *Config) (Server, error) {
-	store, err := storage.NewStorage(cfg.DbURL, cfg.DbName)
+	store, err := storage.NewStorage(cfg.DbURL, cfg.DbName, cfg.DBCronInterval)
 	if err != nil {
 		return nil, err
 	}
@@ -41,6 +41,8 @@ func (s *server) Listen() error {
 	r.HandleFunc(EndpointUpdateCategory.String(), s.getHandler(EndpointUpdateCategory))
 	r.HandleFunc(EndpointDeleteCategory.String(), s.getHandler(EndpointDeleteCategory))
 
+	r.HandleFunc(EndpointUpdateCart.String(), s.getHandler(EndpointUpdateCart))
+	r.HandleFunc(EndpointUpdateCartItemsStatus.String(), s.getHandler(EndpointUpdateCartItemsStatus))
 	http.Handle("/", r)
 
 	if err := http.ListenAndServe(s.cfg.GetPort(), r); err != nil {

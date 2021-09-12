@@ -20,7 +20,7 @@ func run(c *cli.Context) error {
 		logrus.Debugf("Running with config: %s", config.ToString())
 	}
 
-	logrus.SetFormatter(&logrus.JSONFormatter{})
+	config.SetFormatter()
 
 	s, err := server.NewServer(config)
 	if err != nil {
@@ -61,6 +61,20 @@ func main() {
 			Destination: &config.DbName,
 			EnvVar:      "RESTAURANT_DB_NAME",
 			Usage:       "The name of the mongodb database that the server will use.",
+		},
+		cli.StringFlag{
+			Name:        "logrus-formatter",
+			Value:       config.LogrusFormatter,
+			Destination: &config.LogrusFormatter,
+			EnvVar:      "RESTAURANT_LOGRUS_FORMATTER",
+			Usage:       "The name of the formatter used for logging.",
+		},
+		cli.DurationFlag{
+			Name:        "db-cron-interval",
+			Value:       config.DBCronInterval,
+			Destination: &config.DBCronInterval,
+			EnvVar:      "RESTAURANT_DB_CRON_INTERVAL",
+			Usage:       "The length of the intervals that db deletes expired carts (more than 14 days old).",
 		},
 	}
 

@@ -14,6 +14,7 @@ import (
 const (
 	menuItemsCollection  = "MenuItems"
 	categoriesCollection = "Categories"
+	cartsCollection      = "Carts"
 )
 
 type Storage interface {
@@ -27,11 +28,15 @@ type Storage interface {
 	ListCategories(ctx context.Context) ([]*types.Category, error)
 	UpdateCategory(ctx context.Context, req *requests.UpdateCategoryReq) (*types.Category, error)
 	DeleteCategory(ctx context.Context, req *requests.DeleteCategoryReq) error
+
+	UpdateCart(ctx context.Context, req *requests.UpdateCartReq) (*types.Cart, error)
+	UpdateCartItemsStatus(ctx context.Context, req *requests.UpdateCartItemsStatusReq) (*types.Cart, error)
 }
 
 type storage struct {
-	client *mongo.Client
-	dbName string
+	client       *mongo.Client
+	dbName       string
+	cronInterval time.Duration
 }
 
 func (s *storage) menuItems() *mongo.Collection {
@@ -42,7 +47,11 @@ func (s *storage) categories() *mongo.Collection {
 	return s.client.Database(s.dbName).Collection(categoriesCollection)
 }
 
-func NewStorage(dbURL, dbName string) (Storage, error) {
+func (s *storage) carts() *mongo.Collection {
+	return s.client.Database(s.dbName).Collection(cartsCollection)
+}
+
+func NewStorage(dbURL, dbName string, cronInterval time.Duration) (Storage, error) {
 	logrus.Debug("Connecting to mongodb")
 	client, err := mongo.NewClient(options.Client().ApplyURI(dbURL))
 	if err != nil {
@@ -57,5 +66,8 @@ func NewStorage(dbURL, dbName string) (Storage, error) {
 		return nil, err
 	}
 	logrus.Debug("Connected to mongodb")
-	return &storage{client: client, dbName: dbName}, nil
+
+	s := &storage{client: client, dbName: dbName, cronInterval: cronInterval}
+	go s.startCron()
+	return s, nil
 }
