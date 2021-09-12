@@ -53,6 +53,9 @@ const (
 
 	// Indicates that specified category id when creating a menu item does not exist.
 	ERR_DB_CATEGORY_NOT_FOUND ErrorCode = 13
+
+	// Indicates a wrong value has been specified for logrus formatter in config.
+	ERR_CFG_LOGRUS_FORMATTER_INVALID ErrorCode = 14
 )
 
 func (ec ErrorCode) ToHTTPStatus() int {
