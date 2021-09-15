@@ -150,15 +150,15 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
     POST /api/v1/cart/update/items/status
     ```
   - Body:
-  ```Typescript
-  interface UpdateCartItemsStatusReq {
-    /** ID of the cart to be updated */
-    cart_id: string;
-    /** ID's of the cart items whose status' will be updated */
-    item_ids: string[];
-    /** The new status value */
-    status: CartItemStatus;
-  }
-  ```
+    ```Typescript
+    interface UpdateCartItemsStatusReq {
+      /** ID of the cart to be updated */
+      cart_id: string;
+      /** ID's of the cart items whose status' will be updated */
+      item_ids: string[];
+      /** The new status value */
+      status: CartItemStatus;
+    }
+    ```
   - Response: Updated `Cart` object.
 
