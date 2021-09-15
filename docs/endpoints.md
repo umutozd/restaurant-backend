@@ -15,61 +15,44 @@ Currently, there are 11 elementary endpoints necessary for the system. Here are 
 - [UpdateCart](#updatecart)
 - [UpdateCartItemsStatus](#updatecartitemsstatus)
 
+### ListMenu
+- Description: Finds all categories, menu items and groups items by the categories they belong to.
+- HTTP:
+  ```http
+  GET /api/v1/menu/list
+  ```
+- Body: None
+- Response: [Menu](./types.md#menu)
 
 ### CreateMenuItem
 - Description: Creates a MenuItem object.
-  - HTTP:
-    ```http
-    POST /api/v1/menu/items/create
-    ```
-  - Body: `MenuItem` object.
-  - Response: `MenuItem` object with its ID set.
-
-### ListMenu
-  - Description: Finds all categories, menu items and groups items by the categories they belong to.
-  - HTTP:
-    ```http
-    GET /api/v1/menu/list
-    ```
-  - Body: None
-  - Response:
-    ```Typescript
-    interface Menu {
-      /** All categories */
-      category: Category;
-      /** All menu items */
-      items: MenuItem[];
-    }
-    ```
+- HTTP:
+  ```http
+  POST /api/v1/menu/items/create
+  ```
+- Body: `MenuItem` object.
+- Response: `MenuItem` object with its ID set.
 
 ### ListMenuItems
-  - Description: Lists all `MenuItem` objects.
-  - HTTP:
-    ```http
-    GET /api/v1/menu/items/list
-    ```
-  - Body: None
-  - Response:
-    ```Typescript
-    type MenuItemsList MenuItem[];
-    ```
+- Description: Lists all `MenuItem` objects.
+- HTTP:
+  ```http
+  GET /api/v1/menu/items/list
+  ```
+- Body: None
+- Response:
+  ```Typescript
+  type MenuItemsList MenuItem[];
+  ```
 
 ### UpdateMenuItem
-  - Description: Updated a `MenuItem` specified by its ID.
-  - HTTP:
-    ```http
-    POST /api/v1/menu/items/update
-    ```
-  - Body:
-    ```Typescript
-    interface UpdateMenuItemReq {
-      /** Specifies which fields are to be updated */
-      fields: UpdateMenuItemField[];
-      /** Contains the id of the item to update and new values for specified fields */
-      item: MenuItem;
-    }
-    ```
-  - Response: The updated `MenuItem` object.
+- Description: Updated a `MenuItem` specified by its ID.
+- HTTP:
+  ```http
+  POST /api/v1/menu/items/update
+  ```
+- Body: [UpdateMenuItemReq](./types.md#updatemenuitemreq)
+- Response: The updated `MenuItem` object.
 
 ### DeleteMenuItem
   - Description: Deletes a `MenuItem` object, specified by its ID.

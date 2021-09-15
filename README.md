@@ -7,5 +7,6 @@ Through this system customers will be able to;
 - Owners will be able to update the restaurant menu.
 - Owners will be able to view customer orders.
 
-## Other Sources
-[Documentation](./docs/endpoints.md)
+## Documentation
+- [Types](./docs/types.md)
+- [Endpoints and Specifications](./docs/endpoints.md)
